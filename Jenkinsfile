@@ -14,11 +14,19 @@ pipeline {
             }
         }
 
-        stage("test") {
+        stage("Test") {
             steps{
                 script{
                     utils.hello()
                     echo utils.getAppVersion()
+                }
+            }
+        }
+
+        stage("Compile Aapplication Code"){
+            steps{
+                script{
+                    utils.buildCode()
                 }
             }
         }

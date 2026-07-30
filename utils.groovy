@@ -3,8 +3,13 @@ def hello(){
 }
 
 def getAppVersion(){
-    echo "Getting current version from pom.xml"
-    return sh(script:"mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim().split("-")[0]
+    echo 'Getting current version from pom.xml'
+    return sh(script:'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true).trim().split('-')[0]
+}
+
+def buildCode(){
+    echo 'Building application code to JAR'
+    sh 'mvn package'
 }
 
 return this
