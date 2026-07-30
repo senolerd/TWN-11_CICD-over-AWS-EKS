@@ -8,7 +8,17 @@ pipeline {
     stages {
         stage('init') {
             steps {
-                utils = load 'utils.groovy'
+                script {
+                    utils = load 'utils.groovy'
+                }
+            }
+        }
+
+        stage("test") {
+            steps{
+                script{
+                    utils.hello()
+                }
             }
         }
 
