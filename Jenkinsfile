@@ -18,6 +18,7 @@ pipeline {
             steps{
                 script{
                     utils.hello()
+                    echo getAppVersion()
                 }
             }
         }
