@@ -1,19 +1,15 @@
-def hello(){
-    echo "hello"
-}
-
-def getAppVersion(){
+String getAppVersion() {
     echo 'Getting current version from pom.xml'
     return sh(script:'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true).trim().split('-')[0]
 }
 
-def buildCode(){
+void buildCode() {
     echo 'Building application code to JAR'
     sh 'mvn package'
 }
 
-def createContainerfile(){
-    def JAR_FILE = sh(script: 'ls target/*.jar', returnStdout: true).trim().split("/")[1]
+void createContainerfile() {
+    env.JAR_FILE = sh(script: 'ls target/*.jar', returnStdout: true).trim().split('/')[1]
 
     sh """
     cat << EOF > Containerfile
@@ -26,10 +22,9 @@ EOF
     """
 }
 
-def buildImage(){
-
+void buildImage() {
+    // Creates image, logins to registry, pushes the image, then logouts from registry.
     env.IMG_REGISTRY = env.REPO.split('/')[0]
-
 
     echo "Building image for version $APP_VER"
     sh """
@@ -39,11 +34,12 @@ def buildImage(){
 
     withCredentials([usernamePassword(credentialsId: env.REPO_CRED_ID, passwordVariable: 'PW', usernameVariable: 'USER')]) {
         echo "Logging in to $env.IMG_REGISTRY"
-        sh 'podman login -u $USER -p $PW $env.IMG_REGISTRY'
+        sh 'podman login -u $USER -p $PW $IMG_REGISTRY'
     }
 
     echo "Pushing image to $REPO"
     sh "podman push $REPO:$APP_VER-$BUILD_NUMBER"
+    sh 'podman logout $IMG_REGISTRY'
 }
 
 return this

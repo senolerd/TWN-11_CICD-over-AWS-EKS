@@ -17,12 +17,11 @@ pipeline {
                 script {
                     utils = load 'utils.groovy'
                     env.APP_VER = utils.getAppVersion()
-
                 }
             }
         }
 
-        stage("Compile Aapplication Code"){
+        stage('Compile Aapplication Code'){
             steps{
                 script{
                     utils.buildCode()
@@ -31,7 +30,7 @@ pipeline {
             }
         }
 
-        stage("Container build") {
+        stage('Container build') {
             steps{
                 script{
                     echo "Creating OCI Containerfile for $APP_VER"
@@ -46,5 +45,3 @@ pipeline {
 
     }
 }
-
-// BUILD_ID
