@@ -15,7 +15,7 @@ pipeline {
             steps {
                 script {
                     utils = load 'utils.groovy'
-                    env.APP_VER = echo utils.getAppVersion()
+                    env.APP_VER = utils.getAppVersion()
 
                 }
             }
