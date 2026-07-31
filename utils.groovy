@@ -27,14 +27,23 @@ EOF
 }
 
 def buildImage(){
-    echo "Building image for version $APP_VER"
 
+    def repoDomain = $REPO.split('/')[0]
+
+
+    echo "Building image for version $APP_VER"
     sh """
         podman build -t $REPO:$APP_VER-$BUILD_NUMBER .
         podman image prune -f
     """
 
-}
+    withCredentials([usernamePassword(credentialsId: $REPO_CRED_ID, passwordVariable: 'PW', usernameVariable: 'USER')]) {
+        echo "Logging in to $repoDomain"
+        sh 'podman login -u $USER -p $PW'
+    }
 
+    echo "Pushing image to $REPO"
+    sh "podman push $REPO:$APP_VER-$BUILD_NUMBER"
+}
 
 return this

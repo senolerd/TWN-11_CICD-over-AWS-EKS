@@ -5,8 +5,9 @@ pipeline {
     environment {
         JRE = 'cgr.dev/chainguard/jre:latest'
         REPO = 'docker.io/alkol/java-maven-app'
+        REPO_CRED_ID = 'dockerhub-pat-rw'
     }
-    tools {
+    tools { 
         maven 'Maven'
     }
     stages {
