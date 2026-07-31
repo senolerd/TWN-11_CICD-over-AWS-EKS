@@ -28,7 +28,7 @@ EOF
 
 def buildImage(){
 
-    def repoDomain = $REPO.split('/')[0]
+    def repoDomain = env.REPO.split('/')[0]
 
 
     echo "Building image for version $APP_VER"
