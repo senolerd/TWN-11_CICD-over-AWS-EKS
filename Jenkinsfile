@@ -6,19 +6,13 @@ pipeline {
         maven 'Maven'
     }
     stages {
+
         stage('init') {
             steps {
                 script {
                     utils = load 'utils.groovy'
-                }
-            }
-        }
+                    env.APP_VER = echo utils.getAppVersion()
 
-        stage("Test") {
-            steps{
-                script{
-                    utils.hello()
-                    echo utils.getAppVersion()
                 }
             }
         }
@@ -27,15 +21,22 @@ pipeline {
             steps{
                 script{
                     utils.buildCode()
+                    sh 'env'
                 }
             }
         }
 
+        stage("Container build") {
+            steps{
+                echo "Creating OCI Containerfile"
+                utils.createContainerfile()
+            }
+        }
+
+
+
+
     }
 }
 
-// Reading current version
-// mvn help:evaluate -Dexpression=project.version -q -DforceStdout
-
-// Updating to next version
-// mvn build-helper:parse-version versions:set -DnewVersion='${parsedVersion.majorVersion}.${parsedVersion.nextMinorVersion}.0-SNAPSHOT' versions:commit
+// BUILD_ID
