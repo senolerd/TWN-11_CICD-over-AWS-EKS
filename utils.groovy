@@ -17,7 +17,7 @@ def createContainerfile(){
 
     sh """
 cat << EOF > Containerfile
-FROM cgr.dev/chainguard/maven:latest
+FROM $JRE
 LABEL org.opencontainers.image.commit="$GIT_COMMIT"
 WORKDIR /app
 COPY $JAR_FILE .

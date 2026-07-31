@@ -2,6 +2,9 @@ def utils
 
 pipeline {
     agent any
+    environment {
+        JRE= 'cgr.dev/chainguard/jre:latest'
+    }
     tools {
         maven 'Maven'
     }
