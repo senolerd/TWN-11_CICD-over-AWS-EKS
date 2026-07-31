@@ -3,7 +3,7 @@ def utils
 pipeline {
     agent any
     environment {
-        JRE= 'cgr.dev/chainguard/jre:latest'
+        JRE = 'cgr.dev/chainguard/jre:latest'
         REPO = 'docker.io/alkol/java-maven-app'
     }
     tools {
@@ -33,7 +33,7 @@ pipeline {
         stage("Container build") {
             steps{
                 script{
-                    echo "Creating OCI Containerfile"
+                    echo "Creating OCI Containerfile for $APP_VER"
                     utils.createContainerfile()
                     utils.buildImage()
                 }

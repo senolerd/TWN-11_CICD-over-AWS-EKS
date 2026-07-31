@@ -17,16 +17,18 @@ def createContainerfile(){
 
     sh """
     cat << EOF > Containerfile
-    FROM $JRE
-    LABEL org.opencontainers.image.commit="$GIT_COMMIT"
-    WORKDIR /app
-    COPY target/$JAR_FILE .
-    CMD ["-jar", "$JAR_FILE"]
-    EOF
+FROM $JRE
+LABEL org.opencontainers.image.commit="$GIT_COMMIT"
+WORKDIR /app
+COPY target/$JAR_FILE .
+CMD ["-jar", "$JAR_FILE"]
+EOF
     """
 }
 
 def buildImage(){
+    echo "Building image for version $APP_VER"
+
     sh """
         podman build -t $REPO:$APP_VER-$BUILD_NUMBER .
         podman image prune -f
