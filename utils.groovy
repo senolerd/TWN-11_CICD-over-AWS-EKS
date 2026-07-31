@@ -37,7 +37,7 @@ def buildImage(){
         podman image prune -f
     """
 
-    withCredentials([usernamePassword(credentialsId: $REPO_CRED_ID, passwordVariable: 'PW', usernameVariable: 'USER')]) {
+    withCredentials([usernamePassword(credentialsId: env.REPO_CRED_ID, passwordVariable: 'PW', usernameVariable: 'USER')]) {
         echo "Logging in to $repoDomain"
         sh 'podman login -u $USER -p $PW'
     }
