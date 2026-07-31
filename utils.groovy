@@ -28,7 +28,7 @@ EOF
 
 def buildImage(){
 
-    def repoDomain = env.REPO.split('/')[0]
+    env.IMG_REGISTRY = env.REPO.split('/')[0]
 
 
     echo "Building image for version $APP_VER"
@@ -38,8 +38,8 @@ def buildImage(){
     """
 
     withCredentials([usernamePassword(credentialsId: env.REPO_CRED_ID, passwordVariable: 'PW', usernameVariable: 'USER')]) {
-        echo "Logging in to $repoDomain"
-        sh 'podman login -u $USER -p $PW'
+        echo "Logging in to $env.IMG_REGISTRY"
+        sh 'podman login -u $USER -p $PW $env.IMG_REGISTRY'
     }
 
     echo "Pushing image to $REPO"
