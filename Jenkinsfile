@@ -28,8 +28,10 @@ pipeline {
 
         stage("Container build") {
             steps{
-                echo "Creating OCI Containerfile"
-                utils.createContainerfile()
+                script{
+                    echo "Creating OCI Containerfile"
+                    utils.createContainerfile()
+                }
             }
         }
 
