@@ -35,6 +35,7 @@ pipeline {
                 script{
                     echo "Creating OCI Containerfile"
                     utils.createContainerfile()
+                    utils.buildImage()
                 }
             }
         }

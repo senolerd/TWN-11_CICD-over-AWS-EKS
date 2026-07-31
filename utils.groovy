@@ -16,14 +16,14 @@ def createContainerfile(){
     def JAR_FILE = sh(script: 'ls target/*.jar', returnStdout: true).trim().split("/")[1]
 
     sh """
-cat << EOF > Containerfile
-FROM $JRE
-LABEL org.opencontainers.image.commit="$GIT_COMMIT"
-WORKDIR /app
-COPY target/$JAR_FILE .
-CMD ["-jar", "$JAR_FILE"]
-EOF
-"""
+    cat << EOF > Containerfile
+    FROM $JRE
+    LABEL org.opencontainers.image.commit="$GIT_COMMIT"
+    WORKDIR /app
+    COPY target/$JAR_FILE .
+    CMD ["-jar", "$JAR_FILE"]
+    EOF
+    """
 }
 
 def buildImage(){
