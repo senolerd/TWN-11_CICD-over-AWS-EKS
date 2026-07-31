@@ -14,13 +14,13 @@ def buildCode(){
 
 def createContainerfile(){
     def JAR_FILE = sh(script: 'ls target/*.jar', returnStdout: true).trim()
-    
+
     sh """
 cat << EOF > Containerfile
 FROM cgr.dev/chainguard/maven:latest
 LABEL org.opencontainers.image.commit="$GIT_COMMIT"
 WORKDIR /app
-COPY target/$JAR_FILE .
+COPY $JAR_FILE .
 CMD -jar $JAR_FILE
 EOF
 """
