@@ -4,6 +4,7 @@ pipeline {
     agent any
     environment {
         JRE= 'cgr.dev/chainguard/jre:latest'
+        REPO = 'docker.io/alkol/java-maven-app'
     }
     tools {
         maven 'Maven'
