@@ -55,9 +55,9 @@ pipeline {
         //     }
         // }
 
-        steps("Git update for version bump"){
-            steps{
-                script{
+        stage("Git update for version bump") {
+            steps {
+                script {
                     utils.gitPushNewVersion()
                 }
             }
