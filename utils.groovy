@@ -61,11 +61,11 @@ void versionUpdate() {
 }
 
 void gitPushNewVersion() {
-    sh '''
-        git checkout main
-        git add pom.xml
-        git commit -m "[ci] Version bump"
-    '''
+    // sh '''
+    //     git checkout main
+    //     git add pom.xml
+    //     // git commit -m "[ci] Version bump"
+    // '''
     withCredentials([usernamePassword(credentialsId: 'githubpat', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
 
     }
