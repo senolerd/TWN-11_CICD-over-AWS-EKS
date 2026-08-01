@@ -43,8 +43,10 @@ void buildImage() {
 }
 
 void deployToKVM() {
-    withCredentials([file(credentialsId: 'k8s-config-kvm', variable: 'KUBECONFIG')]) {
-        sh 'env'
+    withCredentials([file(credentialsId: env.KUBECONFIG_SECRET_FILE_ID, variable: 'KUBECONFIG')]) {
+        // Uploading application with Helm Chart to local K8s cluster runs on KVM
+        sh 'cat helm-chart/Chart.yaml |grep -v appVersion > helm-chart/Chart.yaml'
+        sh "echo appVersion: $APP_VER-$BUILD_NUMBER >> helm-chart/Chart.yaml"
     }
 }
 
