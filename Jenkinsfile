@@ -51,7 +51,7 @@ pipeline {
         stage("Version bump") {
             steps {
                 script{
-                    versionUpdate()
+                    utils.versionUpdate()
                 }
             }
         }
