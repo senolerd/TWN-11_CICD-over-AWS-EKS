@@ -43,7 +43,7 @@ pipeline {
         stage("Deploy to KVM") {
             steps {
                 script{
-                    versionUpdate()
+                    utils.deployToKVM()
                 }
             }
         }
