@@ -25,7 +25,6 @@ pipeline {
             steps {
                 script {
                     utils.buildCode()
-                    sh 'env'
                 }
             }
         }
