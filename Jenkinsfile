@@ -21,24 +21,24 @@ pipeline {
             }
         }
 
-        // stage('Compile Aapplication Code') {
-        //     steps {
-        //         script {
-        //             utils.buildCode()
-        //             sh 'env'
-        //         }
-        //     }
-        // }
+        stage('Compile Aapplication Code') {
+            steps {
+                script {
+                    utils.buildCode()
+                    sh 'env'
+                }
+            }
+        }
 
-        // stage('Container build') {
-        //     steps{
-        //         script{
-        //             echo "Creating OCI Containerfile for $APP_VER"
-        //             utils.createContainerfile()
-        //             utils.buildImage()
-        //         }
-        //     }
-        // }
+        stage('Container build') {
+            steps{
+                script{
+                    echo "Creating OCI Containerfile for $APP_VER"
+                    utils.createContainerfile()
+                    utils.buildImage()
+                }
+            }
+        }
 
         stage("Deploy to KVM") {
             steps {
@@ -48,13 +48,13 @@ pipeline {
             }
         }
 
-        // stage("Version bump") {
-        //     steps {
-        //         script{
-        //             versionUpdate()
-        //         }
-        //     }
-        // }
+        stage("Version bump") {
+            steps {
+                script{
+                    versionUpdate()
+                }
+            }
+        }
 
 
     }
