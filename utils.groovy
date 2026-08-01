@@ -43,9 +43,7 @@ void buildImage() {
 }
 
 void deployToKVM() {
-    sh '''
-        sed -i '/appVersion/c\\appVersion: $APP_VER-$BUILD_NUMBER' helm-chart/Chart.yaml
-    '''
+    sh "sed -i '/appVersion/c\\appVersion: $APP_VER-$BUILD_NUMBER' helm-chart/Chart.yaml"
 
     withCredentials([file(credentialsId: env.KUBECONFIG_SECRET_FILE_ID, variable: 'KUBECONFIG')]) {
         // Uploading application with Helm Chart to local K8s cluster runs on KVM
