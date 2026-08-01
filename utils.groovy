@@ -5,7 +5,7 @@ String getAppVersion() {
 
 void buildCode() {
     echo 'Building application code to JAR'
-    sh 'mvn package'
+    sh 'mvn clean package'
 }
 
 void createContainerfile() {
@@ -54,19 +54,22 @@ void deployToKVM() {
 }
 
 void versionUpdate() {
+    // If evertyhing went well so far it is time to new version.
     echo 'Updating application version'
     sh '''mvn build-helper:parse-version versions:set -DnewVersion='${parsedVersion.majorVersion}.${parsedVersion.nextMinorVersion}.0-SNAPSHOT' -q versions:commit'''
-
-    
 }
 
 void gitPushNewVersion() {
-    // sh '''
-    //     git checkout main
-    //     git add pom.xml
-    //     // git commit -m "[ci] Version bump"
-    // '''
-    withCredentials([usernamePassword(credentialsId: 'githubpat', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+    sh '''
+        git add pom.xml
+        git commit -m "[ci] Version bump"
+
+    '''
+    withCredentials([usernamePassword(credentialsId: 'githubpat', passwordVariable: 'PAT', usernameVariable: 'USER')]) {
+
+        def remoteOriginUrl = sh(script:'git config get remote.origin.url', returnStdout: true).trim().replace('//','//$USER:$PAT@' )
+        echo remoteOriginUrl
+        
 
     }
 
