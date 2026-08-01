@@ -43,8 +43,8 @@ void buildImage() {
 }
 
 void deployToKVM() {
-    sh ''' 
-        sed -i '/appVersion/c\appVersion: $APP_VER-$BUILD_NUMBER' Chart.yaml
+    sh '''
+        sed -i '/appVersion/c\\appVersion: $APP_VER-$BUILD_NUMBER' Chart.yaml
     '''
 
     withCredentials([file(credentialsId: env.KUBECONFIG_SECRET_FILE_ID, variable: 'KUBECONFIG')]) {
