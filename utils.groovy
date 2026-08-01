@@ -49,7 +49,7 @@ void deployToKVM() {
     withCredentials([file(credentialsId: env.KUBECONFIG_SECRET_FILE_ID, variable: 'KUBECONFIG')]) {
         // Updating application with Helm Chart to local K8s cluster runs on KVM
         echo "Trying to update with HELM"
-        sh "helm upgrade --install java-maven -n java-maven --create-namespace --set image=$REPO:$APP_VER-$BUILD_NUMBER"
+        sh "helm upgrade --install java-maven helm-chart -n java-maven --create-namespace --set image=$REPO:$APP_VER-$BUILD_NUMBER"
     }
 }
 
