@@ -15,6 +15,7 @@ void createContainerfile() {
     cat << EOF > Containerfile
 FROM $JRE
 LABEL org.opencontainers.image.commit="$GIT_COMMIT"
+EXPOSE 8080
 WORKDIR /app
 COPY target/$JAR_FILE .
 CMD ["-jar", "$JAR_FILE"]
@@ -46,9 +47,9 @@ void deployToKVM() {
     sh "sed -i '/appVersion/c\\appVersion: $APP_VER-$BUILD_NUMBER' helm-chart/Chart.yaml"
 
     withCredentials([file(credentialsId: env.KUBECONFIG_SECRET_FILE_ID, variable: 'KUBECONFIG')]) {
-        // Uploading application with Helm Chart to local K8s cluster runs on KVM
-
-        
+        // Updating application with Helm Chart to local K8s cluster runs on KVM
+        echo "Trying to update with HELM"
+        sh "helm upgrade --install java-maven -n java-maven --create-namespace --set image=$REPO:$APP_VER-$BUILD_NUMBER"
     }
 }
 
