@@ -1,3 +1,7 @@
+
+
+
+
 Plan:
 - Write K8s manifest files for Deployment and Service configuration
 - Integrate deploy step in the CI/CD pipeline to deploy newly built application image from DockerHub private registry to the EKS cluster
