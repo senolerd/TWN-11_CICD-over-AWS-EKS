@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: java-maven-app-svc
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: java-maven-app
   ports:
