@@ -67,9 +67,11 @@ void gitPushNewVersion() {
 
     withCredentials([usernamePassword(credentialsId: 'githubpat', passwordVariable: 'PAT', usernameVariable: 'USER')]) {
 
-        def remoteOriginUrl = sh(script:'git config get remote.origin.url', returnStdout: true).trim().replace('//','//$USER:$PAT@' )
-        echo remoteOriginUrl
-        sh 'echo $remoteOriginUrl'
+        def env.remoteOriginUrl = sh(script:'git config get remote.origin.url', returnStdout: true).trim().replace('//','//$USER:$PAT@' )
+        echo env.remoteOriginUrl
+        
+
+
 
     }
 
