@@ -63,13 +63,13 @@ void gitPushNewVersion() {
     sh '''
         git add pom.xml
         git commit -m "[ci] Version bump"
-
     '''
+
     withCredentials([usernamePassword(credentialsId: 'githubpat', passwordVariable: 'PAT', usernameVariable: 'USER')]) {
 
         def remoteOriginUrl = sh(script:'git config get remote.origin.url', returnStdout: true).trim().replace('//','//$USER:$PAT@' )
         echo remoteOriginUrl
-        
+        sh 'echo ${remoteOriginUrl}'
 
     }
 
