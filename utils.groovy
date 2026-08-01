@@ -56,7 +56,21 @@ void deployToKVM() {
 void versionUpdate() {
     echo 'Updating application version'
     sh '''mvn build-helper:parse-version versions:set -DnewVersion='${parsedVersion.majorVersion}.${parsedVersion.nextMinorVersion}.0-SNAPSHOT' -q versions:commit'''
+
     
+}
+
+void gitPushNewVersion() {
+    sh '''
+        git checkout main
+        git add pom.xml
+        git commit -m "[ci] Version bump"
+    '''
+    withCredentials([usernamePassword(credentialsId: 'githubpat', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+
+    }
+
+
 }
 
 return this

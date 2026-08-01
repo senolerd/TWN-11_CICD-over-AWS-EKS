@@ -21,38 +21,47 @@ pipeline {
             }
         }
 
-        stage('Compile Aapplication Code') {
-            steps {
-                script {
-                    utils.buildCode()
-                }
-            }
-        }
+        // stage('Compile Aapplication Code') {
+        //     steps {
+        //         script {
+        //             utils.buildCode()
+        //         }
+        //     }
+        // }
 
-        stage('Container build') {
+        // stage('Container build') {
+        //     steps{
+        //         script{
+        //             echo "Creating OCI Containerfile for $APP_VER"
+        //             utils.createContainerfile()
+        //             utils.buildImage()
+        //         }
+        //     }
+        // }
+
+        // stage("Deploy to KVM") {
+        //     steps {
+        //         script{
+        //             utils.deployToKVM()
+        //         }
+        //     }
+        // }
+
+        // stage("Version bump") {
+        //     steps {
+        //         script{
+        //             utils.versionUpdate()
+        //         }
+        //     }
+        // }
+
+        steps("Git update for version bump"){
             steps{
                 script{
-                    echo "Creating OCI Containerfile for $APP_VER"
-                    utils.createContainerfile()
-                    utils.buildImage()
+                    utils.gitPushNewVersion()
                 }
             }
         }
 
-        stage("Deploy to KVM") {
-            steps {
-                script{
-                    utils.deployToKVM()
-                }
-            }
-        }
-
-        stage("Version bump") {
-            steps {
-                script{
-                    utils.versionUpdate()
-                }
-            }
-        }
     }
 }
