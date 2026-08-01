@@ -6,12 +6,12 @@ pipeline {
         JRE = 'cgr.dev/chainguard/jre:latest'
         REPO = 'docker.io/alkol/java-maven-app'
         REPO_CRED_ID = 'dockerhub-pat-rw'
+        KUBECONFIG_SECRET_FILE_ID = 'k8s-config-kvm'
     }
     tools { 
         maven 'Maven'
     }
     stages {
-
         stage('init') {
             steps {
                 script {
@@ -21,32 +21,40 @@ pipeline {
             }
         }
 
-        stage('Compile Aapplication Code'){
-            steps{
-                script{
-                    utils.buildCode()
-                    sh 'env'
-                }
-            }
-        }
+        // stage('Compile Aapplication Code') {
+        //     steps {
+        //         script {
+        //             utils.buildCode()
+        //             sh 'env'
+        //         }
+        //     }
+        // }
 
-        stage('Container build') {
-            steps{
-                script{
-                    echo "Creating OCI Containerfile for $APP_VER"
-                    utils.createContainerfile()
-                    utils.buildImage()
-                }
-            }
-        }
+        // stage('Container build') {
+        //     steps{
+        //         script{
+        //             echo "Creating OCI Containerfile for $APP_VER"
+        //             utils.createContainerfile()
+        //             utils.buildImage()
+        //         }
+        //     }
+        // }
 
-        stage("Version bump") {
+        stage("Deploy to KVM") {
             steps {
                 script{
                     versionUpdate()
                 }
             }
         }
+
+        // stage("Version bump") {
+        //     steps {
+        //         script{
+        //             versionUpdate()
+        //         }
+        //     }
+        // }
 
 
     }
