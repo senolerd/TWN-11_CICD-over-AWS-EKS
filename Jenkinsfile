@@ -22,31 +22,31 @@ pipeline {
             }
         }
 
-        // stage('Compile Aapplication Code') {
-        //     steps {
-        //         script {
-        //             utils.buildCode()
-        //         }
-        //     }
-        // }
+        stage('Compile Aapplication Code') {
+            steps {
+                script {
+                    utils.buildCode()
+                }
+            }
+        }
 
-        // stage('Container build') {
-        //     steps{
-        //         script{
-        //             echo "Creating OCI Containerfile for $APP_VER"
-        //             utils.createContainerfile()
-        //             utils.buildImage()
-        //         }
-        //     }
-        // }
+        stage('Container build') {
+            steps{
+                script{
+                    echo "Creating OCI Containerfile for $APP_VER"
+                    utils.createContainerfile()
+                    utils.buildImage()
+                }
+            }
+        }
 
-        // stage("Deploy to KVM") {
-        //     steps {
-        //         script{
-        //             utils.deployToKVM()
-        //         }
-        //     }
-        // }
+        stage("Deploy to KVM") {
+            steps {
+                script{
+                    utils.deployToKVM()
+                }
+            }
+        }
 
         stage("Version bump") {
             steps {
