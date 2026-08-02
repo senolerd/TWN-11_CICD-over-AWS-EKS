@@ -26,10 +26,11 @@ EOF
 void buildImageToDocker() {
     // Creates image, logins to registry, pushes the image, then logouts from registry.
     // env.IMG_REGISTRY = env.REPO.split('/')[0]
-
+    env.IMAGE_NAME = "${REGISTRY}/${REPO_NAME}:${APP_VER}-${BUILD_NUMBER}"
+    
     echo "Building image for version $APP_VER"
     sh """
-        podman build -t $REGISTRY/$IMAGE_NAME:$APP_VER-$BUILD_NUMBER .
+        podman build -t $IMAGE_NAME .
         podman image prune -f
     """
 
@@ -39,7 +40,7 @@ void buildImageToDocker() {
     }
 
     echo "Pushing image to $REGISTRY"
-    sh "podman push $REGISTRY/$IMAGE_NAME:$APP_VER-$BUILD_NUMBER"
+    sh "podman push $IMAGE_NAME"
     sh 'podman logout $REGISTRY'
 }
 
@@ -47,9 +48,8 @@ void deployToKVM() {
     sh "sed -i '/appVersion/c\\appVersion: $APP_VER-$BUILD_NUMBER' helm-chart/Chart.yaml"
 
     withCredentials([file(credentialsId: env.KUBECONFIG_SECRET_FILE_ID, variable: 'KUBECONFIG')]) {
-        // Updating application with Helm Chart to local K8s cluster runs on KVM
         echo "Update app with Helm chart"
-        sh "helm upgrade --install java-maven helm-chart -n java-maven --create-namespace --set image=$REGISTRY/$IMAGE_NAME:$APP_VER-$BUILD_NUMBER"
+        sh "helm upgrade --install java-maven helm-chart -n java-maven --create-namespace --set image=$IMAGE_NAME"
     }
 }
 
