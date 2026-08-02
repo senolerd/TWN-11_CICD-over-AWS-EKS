@@ -67,11 +67,9 @@ void gitPushNewVersion() {
 
     withCredentials([usernamePassword(credentialsId: 'githubpat', passwordVariable: 'PAT', usernameVariable: 'USER')]) {
 
-        env.remoteOriginUrl = sh(script:'git config get remote.origin.url', returnStdout: true).trim().replace('//','//$USER:$PAT@' )
-        echo env.remoteOriginUrl
+        env.REMOTE_ORIGIN_URL = sh(script:'git config get remote.origin.url', returnStdout: true).trim().replace('//','//$USER:$PAT@' )
         
-
-
+        sh 'git push $REMOTE_ORIGIN_URL HEAD:$GIT_BRANCH'
 
     }
 
