@@ -71,10 +71,12 @@ void gitPushNewVersion() {
 
     // withCredentials([usernamePassword(credentialsId: 'githubpat', passwordVariable: 'GIT_PAT', usernameVariable: 'GIT_USERNAME')]) {
 
-        env.REMOTE_ORIGIN_USRANDPROJECT = sh(script:'git config get remote.origin.url', returnStdout: true).trim().split('/')[-2..-1]
-        sh "echo REMOTE_ORIGIN_USRANDPROJECT: $REMOTE_ORIGIN_USRANDPROJECT"
+        gitRemoteUserAndProject = sh(script:'git config get remote.origin.url', returnStdout: true).trim().split('/')[-2..-1]
+
+        echo "gitRemoteUserAndProject: $gitRemoteUserAndProject"
+
     // sshagent(['git_rsa_priv']) {
-    //     sh 'git push origin HEAD:$GIT_BRANCH'
+    //     sh 'git push git@github: HEAD:$GIT_BRANCH'
     // }
     
     
