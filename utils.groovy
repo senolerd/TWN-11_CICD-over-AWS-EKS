@@ -70,7 +70,7 @@ void gitPushNewVersion() {
         // env.REMOTE_ORIGIN_URL = sh(script:'git config get remote.origin.url', returnStdout: true).trim().replace('//','//\$GIT_USERNAME:\$GIT_PAT@' )
 
     sshagent(['git_rsa_priv']) {
-        sh 'git push HEAD:$GIT_BRANCH'
+        sh 'git push origin HEAD:$GIT_BRANCH'
     }
 
     
