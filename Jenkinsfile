@@ -4,7 +4,8 @@ pipeline {
     agent any
     environment {
         JRE = 'cgr.dev/chainguard/jre:latest'
-        REPO = 'docker.io/alkol/java-maven-app'
+        IMAGE_NAME = 'java-maven-app'
+        REGISTRY = 'docker.io/alkol/'
         REPO_CRED_ID = 'dockerhub-pat-rw'
         KUBECONFIG_SECRET_FILE_ID = 'k8s-config-kvm'
         GIT_RSA_ID = "git_rsa_priv" // the RSA private key added its ".pub" to GitHub
@@ -35,7 +36,7 @@ pipeline {
                 script{
                     echo "Creating OCI Containerfile for $APP_VER"
                     utils.createContainerfile()
-                    utils.buildImage()
+                    utils.buildImageToDocker()
                 }
             }
         }

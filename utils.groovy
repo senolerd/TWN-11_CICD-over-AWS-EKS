@@ -23,24 +23,24 @@ EOF
     """
 }
 
-void buildImage() {
+void buildImageToDocker() {
     // Creates image, logins to registry, pushes the image, then logouts from registry.
-    env.IMG_REGISTRY = env.REPO.split('/')[0]
+    // env.IMG_REGISTRY = env.REPO.split('/')[0]
 
     echo "Building image for version $APP_VER"
     sh """
-        podman build -t $REPO:$APP_VER-$BUILD_NUMBER .
+        podman build -t $REGISTRY/$IMAGE_NAME:$APP_VER-$BUILD_NUMBER .
         podman image prune -f
     """
 
-    withCredentials([usernamePassword(credentialsId: env.REPO_CRED_ID, passwordVariable: 'PW', usernameVariable: 'USER')]) {
-        echo "Logging in to $env.IMG_REGISTRY"
-        sh 'podman login -u $USER -p $PW $IMG_REGISTRY'
+    withCredentials([usernamePassword(credentialsId: env.REPO_CRED_ID, passwordVariable: 'PW', usernameVariable: 'USR')]) {
+        echo "Logging in to ${env.REGISTRY}"
+        sh 'podman login -u $USR -p $PW $REGISTRY'
     }
 
-    echo "Pushing image to $REPO"
-    sh "podman push $REPO:$APP_VER-$BUILD_NUMBER"
-    sh 'podman logout $IMG_REGISTRY'
+    echo "Pushing image to $REGISTRY"
+    sh "podman push $REGISTRY/$IMAGE_NAME:$APP_VER-$BUILD_NUMBER"
+    sh 'podman logout $REGISTRY'
 }
 
 void deployToKVM() {
@@ -48,10 +48,14 @@ void deployToKVM() {
 
     withCredentials([file(credentialsId: env.KUBECONFIG_SECRET_FILE_ID, variable: 'KUBECONFIG')]) {
         // Updating application with Helm Chart to local K8s cluster runs on KVM
-        echo "Trying to update with HELM"
-        sh "helm upgrade --install java-maven helm-chart -n java-maven --create-namespace --set image=$REPO:$APP_VER-$BUILD_NUMBER"
+        echo "Update app with Helm chart"
+        sh "helm upgrade --install java-maven helm-chart -n java-maven --create-namespace --set image=$REGISTRY/$IMAGE_NAME:$APP_VER-$BUILD_NUMBER"
     }
 }
+
+
+
+
 
 void versionUpdate() {
     // If evertyhing went well so far it is time to new version.

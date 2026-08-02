@@ -1,4 +1,4 @@
-
+## 
 
 
 
@@ -11,8 +11,3 @@ Plan:
     c. CI step: Build and push Docker image to Docker Hub
     d. CD step: Deploy new application to EKS cluster
     e. Commit the version update
-
-
-.
-.
-.
