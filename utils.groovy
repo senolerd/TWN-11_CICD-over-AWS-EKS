@@ -77,7 +77,7 @@ void gitPushNewVersion() {
         // sh "echo GIT_USER: $GIT_USER, GIT_PROJECT: $GIT_PROJECT "
 
     sshagent(['git_rsa_priv']) {
-        sh 'git push git@github:$GIT_USER/$GIT_PROJECT HEAD:$GIT_BRANCH'
+        sh 'git push git@github.com:$GIT_USER/$GIT_PROJECT HEAD:$GIT_BRANCH'
     }
     
     
