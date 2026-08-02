@@ -72,8 +72,9 @@ void gitPushNewVersion() {
     // withCredentials([usernamePassword(credentialsId: 'githubpat', passwordVariable: 'GIT_PAT', usernameVariable: 'GIT_USERNAME')]) {
 
         gitRemoteUserAndProject = sh(script:'git config get remote.origin.url', returnStdout: true).trim().split('/')[-2..-1]
-
-        echo "gitRemoteUserAndProject: $gitRemoteUserAndProject"
+        env.GIT_USER = gitRemoteUserAndProject[0]
+        env.GIT_PROJECT = gitRemoteUserAndProject[1]
+        sh "echo GIT_USER: $GIT_USER, GIT_PROJECT: $GIT_PROJECT "
 
     // sshagent(['git_rsa_priv']) {
     //     sh 'git push git@github: HEAD:$GIT_BRANCH'
