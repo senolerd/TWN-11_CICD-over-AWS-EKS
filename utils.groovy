@@ -63,16 +63,17 @@ void gitPushNewVersion() {
     sh '''
         git add pom.xml
         git commit -m "[ci] Version bump"
+        git config list
     '''
 
     // withCredentials([usernamePassword(credentialsId: 'githubpat', passwordVariable: 'GIT_PAT', usernameVariable: 'GIT_USERNAME')]) {
 
         // env.REMOTE_ORIGIN_URL = sh(script:'git config get remote.origin.url', returnStdout: true).trim().replace('//','//\$GIT_USERNAME:\$GIT_PAT@' )
 
-    sshagent(['git_rsa_priv']) {
-        sh 'git push origin HEAD:$GIT_BRANCH'
-    }
-
+    // sshagent(['git_rsa_priv']) {
+    //     sh 'git push origin HEAD:$GIT_BRANCH'
+    // }
+    
     
         
 
