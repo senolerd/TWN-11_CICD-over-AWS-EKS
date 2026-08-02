@@ -65,9 +65,9 @@ void gitPushNewVersion() {
         git commit -m "[ci] Version bump"
     '''
 
-    withCredentials([usernamePassword(credentialsId: 'githubpat', passwordVariable: 'PAT', usernameVariable: 'USER')]) {
+    withCredentials([usernamePassword(credentialsId: 'githubpat', passwordVariable: 'GIT_PAT', usernameVariable: 'GIT_USERNAME')]) {
 
-        env.REMOTE_ORIGIN_URL = sh(script:'git config get remote.origin.url', returnStdout: true).trim().replace('//','//$USER:$PAT@' )
+        env.REMOTE_ORIGIN_URL = sh(script:'git config get remote.origin.url', returnStdout: true).trim().replace('//','//$GIT_USERNAME:$GIT_PAT@' )
         
         sh 'git push $REMOTE_ORIGIN_URL HEAD:$GIT_BRANCH'
 
