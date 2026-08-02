@@ -7,6 +7,7 @@ pipeline {
         REPO = 'docker.io/alkol/java-maven-app'
         REPO_CRED_ID = 'dockerhub-pat-rw'
         KUBECONFIG_SECRET_FILE_ID = 'k8s-config-kvm'
+        GIT_RSA_ID = "git_rsa_priv" // the RSA private key added its ".pub" to GitHub
     }
     tools { 
         maven 'Maven'

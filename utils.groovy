@@ -63,29 +63,15 @@ void gitPushNewVersion() {
     sh '''
         git add pom.xml
         git commit -m "[ci] Version bump"
-        git config list
     '''
 
-    // git@github.com:senolerd/TWN-11_CICD-over-AWS-EKS.git HEAD:main
+    gitRemoteUserAndProject = sh(script:'git config get remote.origin.url', returnStdout: true).trim().split('/')[-2..-1]
+    env.GIT_USER = gitRemoteUserAndProject[0]
+    env.GIT_PROJECT = gitRemoteUserAndProject[1]
 
-
-    // withCredentials([usernamePassword(credentialsId: 'githubpat', passwordVariable: 'GIT_PAT', usernameVariable: 'GIT_USERNAME')]) {
-
-        gitRemoteUserAndProject = sh(script:'git config get remote.origin.url', returnStdout: true).trim().split('/')[-2..-1]
-        env.GIT_USER = gitRemoteUserAndProject[0]
-        env.GIT_PROJECT = gitRemoteUserAndProject[1]
-        // sh "echo GIT_USER: $GIT_USER, GIT_PROJECT: $GIT_PROJECT "
-
-    sshagent(['git_rsa_priv']) {
+    sshagent([GIT_RSA_ID]) {
         sh 'git push git@github.com:$GIT_USER/$GIT_PROJECT HEAD:$GIT_BRANCH'
     }
-    
-    
-        
-
-    // }
-
-
 }
 
 return this
