@@ -66,10 +66,13 @@ void gitPushNewVersion() {
         git config list
     '''
 
+    // git@github.com:senolerd/TWN-11_CICD-over-AWS-EKS.git HEAD:main
+
+
     // withCredentials([usernamePassword(credentialsId: 'githubpat', passwordVariable: 'GIT_PAT', usernameVariable: 'GIT_USERNAME')]) {
 
-        // env.REMOTE_ORIGIN_URL = sh(script:'git config get remote.origin.url', returnStdout: true).trim().replace('//','//\$GIT_USERNAME:\$GIT_PAT@' )
-
+        env.REMOTE_ORIGIN_USRANDPROJECT = sh(script:'git config get remote.origin.url', returnStdout: true).trim().split('/')[-2..-1]
+        sh "echo REMOTE_ORIGIN_USRANDPROJECT: $REMOTE_ORIGIN_USRANDPROJECT"
     // sshagent(['git_rsa_priv']) {
     //     sh 'git push origin HEAD:$GIT_BRANCH'
     // }
