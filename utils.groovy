@@ -46,29 +46,35 @@ void buildImageToDocker() {
 
 
 void buildImageToECR() {
-    // public.ecr.aws/aws-cli/aws-cli:2.36.6
-
-    
-
 
     withCredentials([usernamePassword(credentialsId: env.AWS_JENKINS_ACC_KEY_ID, passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
         
         env.ECR_TOKEN = sh(script:'podman run --rm --name aws -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY  public.ecr.aws/aws-cli/aws-cli:2.36.6 ecr get-login-password', returnStdout: true).trim()
         env.AWS_ACCOUNT = sh(script:'podman run --rm --name aws -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY  public.ecr.aws/aws-cli/aws-cli:2.36.6 sts get-caller-identity --query "Account" --output text', returnStdout: true).trim()
-        
+        env.ECR_REGISTRY = "${env.AWS_ACCOUNT}.dkr.ecr.${env.AWS_REGION}.amazonaws.com"
+
         echo "Logging in to ECR"
         sh '''
             set +x
             podman login -u AWS -p $ECR_TOKEN ${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com 
             set -x
-            echo "Checking login?"
+            echo "Checking login"
             podman login ${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com 
             '''
         
-        // env.IMAGE_NAME = "${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REPO_NAME}:${APP_VER}-${BUILD_NUMBER}"
+        env.IMAGE_NAME = "${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REPO_NAME}:${APP_VER}-${BUILD_NUMBER}"
         
+        
+        echo "BUILDING"
+        sh """
+            podman build -t $IMAGE_NAME .
+            podman image prune -f
+        """
 
-
+        echo "PUSHING"
+        echo "Pushing image to ${env.ECR_REGISTRY}"
+        sh "podman push $IMAGE_NAME"
+        sh 'podman logout $ECR_REGISTRY'
 
 
 
