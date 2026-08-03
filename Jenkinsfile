@@ -19,7 +19,7 @@ pipeline {
         // The pipeline will figure out the AWS account id with AWS STS, then will create ECR registry and repo urls
 
         AWS_JENKINS_ACC_KEY_ID = "aws-jenkins-access-key"
-        EKS_CLUSTER_NAME = ""
+        EKS_CLUSTER_NAME = "mykube"
         AWS_REGION = "us-east-1"
     }
     tools { 
