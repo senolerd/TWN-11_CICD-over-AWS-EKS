@@ -51,7 +51,7 @@ void buildImageToECR() {
     withCredentials([usernamePassword(credentialsId: env.AWS_JENKINS_ACC_KEY_ID, passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
         
         String ecrToken = sh(script:'podman run --rm --name aws -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY  public.ecr.aws/aws-cli/aws-cli:2.36.6 ecr get-login-password', returnStdout: true).trim()
-        String awsAccount = sh(script:'podman run --rm --name aws -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY  public.ecr.aws/aws-cli/aws-cli:2.36.6 aws sts get-caller-identity --query "Account" --output text', returnStdout: true)
+        String awsAccount = sh(script:'podman run --rm --name aws -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY  public.ecr.aws/aws-cli/aws-cli:2.36.6 sts get-caller-identity --query "Account" --output text', returnStdout: true)
         echo "AWS Account: $awsAccount"
 
         
