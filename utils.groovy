@@ -48,6 +48,9 @@ void buildImageToDocker() {
 void buildImageToECR() {
     // public.ecr.aws/aws-cli/aws-cli:2.36.6
 
+    
+
+
     withCredentials([usernamePassword(credentialsId: env.AWS_JENKINS_ACC_KEY_ID, passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
         
         env.ECR_TOKEN = sh(script:'podman run --rm --name aws -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY  public.ecr.aws/aws-cli/aws-cli:2.36.6 ecr get-login-password', returnStdout: true).trim()
@@ -58,10 +61,16 @@ void buildImageToECR() {
             set +x
             podman login -u AWS -p $ECR_TOKEN ${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com 
             set -x
-            echo "after the masking is disabled"
+            echo "Checking login?"
+            podman login ${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com 
             '''
-
         
+        // env.IMAGE_NAME = "${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REPO_NAME}:${APP_VER}-${BUILD_NUMBER}"
+        
+
+
+
+
 
     }
 
