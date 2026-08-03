@@ -90,12 +90,8 @@ void deployToEKS() {
 
     withCredentials([usernamePassword(credentialsId: env.AWS_JENKINS_ACC_KEY_ID, passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
         sh "aws eks update-kubeconfig --name ${EKS_CLUSTER_NAME} --region ${AWS_REGION} --kubeconfig ${EKS_CLUSTER_NAME}.config"
+        helm list --kubeconfig ${EKS_CLUSTER_NAME}.config
     }
-
-    withCredentials([usernamePassword(credentialsId: env.AWS_JENKINS_ACC_KEY_ID, passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
-        sh "helm list --kubeconfig ${EKS_CLUSTER_NAME}.config"
-    }
-
 
 
     // withCredentials([file(credentialsId: env.KUBECONFIG_SECRET_FILE_ID, variable: 'KUBECONFIG')]) {
