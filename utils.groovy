@@ -44,11 +44,11 @@ void buildImageToDocker() {
     sh 'podman logout $REGISTRY'
 }
 
-
 void buildImageToECR() {
 
     withCredentials([usernamePassword(credentialsId: env.AWS_JENKINS_ACC_KEY_ID, passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
         
+        // I don't know why i didn't install awscli2 to Jenkins container. Maybe i should change these lines
         env.ECR_TOKEN = sh(script:'podman run --rm --name aws -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY  public.ecr.aws/aws-cli/aws-cli:2.36.6 ecr get-login-password', returnStdout: true).trim()
         env.AWS_ACCOUNT = sh(script:'podman run --rm --name aws -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY  public.ecr.aws/aws-cli/aws-cli:2.36.6 sts get-caller-identity --query "Account" --output text', returnStdout: true).trim()
         env.ECR_REGISTRY = "${env.AWS_ACCOUNT}.dkr.ecr.${env.AWS_REGION}.amazonaws.com"
@@ -64,7 +64,6 @@ void buildImageToECR() {
         
         env.IMAGE_NAME = "${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REPO_NAME}:${APP_VER}-${BUILD_NUMBER}"
         
-        
         echo "BUILDING"
         sh """
             podman build -t $IMAGE_NAME .
@@ -75,29 +74,34 @@ void buildImageToECR() {
         echo "Pushing image to ${env.ECR_REGISTRY}"
         sh "podman push $IMAGE_NAME"
         sh 'podman logout $ECR_REGISTRY'
-
-
-
     }
-
 }
-
-
-
-
 
 void deployToKVM() {
     sh "sed -i '/appVersion/c\\appVersion: $APP_VER-$BUILD_NUMBER' helm-chart/Chart.yaml"
-
     withCredentials([file(credentialsId: env.KUBECONFIG_SECRET_FILE_ID, variable: 'KUBECONFIG')]) {
         echo "Update app with Helm chart"
         sh "helm upgrade --install java-maven helm-chart -n java-maven --create-namespace --set image=$IMAGE_NAME"
     }
 }
 
+void deployToEKS() {
+    sh "sed -i '/appVersion/c\\appVersion: $APP_VER-$BUILD_NUMBER' helm-chart/Chart.yaml"
 
+    withCredentials([usernamePassword(credentialsId: env.AWS_JENKINS_ACC_KEY_ID, passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
 
+        echo "Getting kubeconfig file"
+        sh 'aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION --kubeconfig ${EKS_CLUSTER_NAME}.config'
 
+        echo "Listing helm charts"        
+        sh 'helm list --kubeconfig ${EKS_CLUSTER_NAME}.config'
+    }
+
+    // withCredentials([file(credentialsId: env.KUBECONFIG_SECRET_FILE_ID, variable: 'KUBECONFIG')]) {
+    //     echo "Update app with Helm chart"
+    //     sh "helm upgrade --install java-maven helm-chart -n java-maven --create-namespace --set image=$IMAGE_NAME"
+    // }
+}
 
 void versionUpdate() {
     // If evertyhing went well so far it is time to new version.
