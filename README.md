@@ -1,5 +1,8 @@
 ## 
 
+Required applications expected to installed on Jenkins servers will be used at pipeline;
+- awscli2
+- helm
 
 
 Plan:

@@ -44,6 +44,25 @@ void buildImageToDocker() {
     sh 'podman logout $REGISTRY'
 }
 
+
+void buildImageToECR() {
+    // public.ecr.aws/aws-cli/aws-cli:2.36.6
+
+    withCredentials([usernamePassword(credentialsId: env.AWS_JENKINS_ACC_KEY_ID, passwordVariable: 'AWS_ACCESS_KEY_ID', usernameVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+        
+        String ecrToken = sh(script:'podman run -it --rm --name aws -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY  public.ecr.aws/aws-cli/aws-cli:2.36.6 ecr get-login-password $AWS_REGION', returnStdout: true)
+        echo "ecrToken $ecrToken"
+
+    // echo "Logging in to ${env.REGISTRY}"
+    // sh 'podman login -u $USR -p $PW $REGISTRY'
+    }
+
+}
+
+
+
+
+
 void deployToKVM() {
     sh "sed -i '/appVersion/c\\appVersion: $APP_VER-$BUILD_NUMBER' helm-chart/Chart.yaml"
 

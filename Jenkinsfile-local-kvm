@@ -4,17 +4,11 @@ pipeline {
     agent any
     environment {
         JRE = 'cgr.dev/chainguard/jre:latest'
-        GIT_RSA_ID = "git_rsa_priv" // the RSA private key added its ".pub" to GitHub
-
         REPO_NAME = 'java-maven-app'
         REGISTRY = 'docker.io/alkol'
         REPO_CRED_ID = 'dockerhub-pat-rw'
         KUBECONFIG_SECRET_FILE_ID = 'k8s-config-kvm'
-
-        // AWS related variables
-        //// [CLI ACCESS]  Username=AWS_ACCESS_KEY_ID, Password=AWS_SECRET_ACCESS_KEY
-        AWS_JENKINS_ACC_KEY_ID = "aws-jenkins-access-key"
-        AWS_REGION = "us-east-1"
+        GIT_RSA_ID = "git_rsa_priv" // the RSA private key added its ".pub" to GitHub
     }
     tools { 
         maven 'Maven'
@@ -42,34 +36,34 @@ pipeline {
                 script{
                     echo "Creating OCI Containerfile for $APP_VER"
                     utils.createContainerfile()
-                    utils.buildImageToECR()
+                    utils.buildImageToDocker()
                 }
             }
         }
 
-        // stage("Deploy to KVM") {
-        //     steps {
-        //         script{
-        //             utils.deployToKVM()
-        //         }
-        //     }
-        // }
+        stage("Deploy to KVM") {
+            steps {
+                script{
+                    utils.deployToKVM()
+                }
+            }
+        }
 
-        // stage("Version bump") {
-        //     steps {
-        //         script{
-        //             utils.versionUpdate()
-        //         }
-        //     }
-        // }
+        stage("Version bump") {
+            steps {
+                script{
+                    utils.versionUpdate()
+                }
+            }
+        }
 
-        // stage("Git update for version bump") {
-        //     steps {
-        //         script {
-        //             utils.gitPushNewVersion()
-        //         }
-        //     }
-        // }
+        stage("Git update for version bump") {
+            steps {
+                script {
+                    utils.gitPushNewVersion()
+                }
+            }
+        }
 
     }
 }
