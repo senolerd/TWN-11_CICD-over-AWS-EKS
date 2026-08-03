@@ -56,8 +56,9 @@ void buildImageToECR() {
         echo "Logging in to ECR"
         sh '''
             set +x
-            podman login -u AWS -p $ECR_TOKEN ${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com > /dev/null 2>&1
+            podman login -u AWS -p $ECR_TOKEN ${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com 
             set -x
+            echo "after the masking is disabled"
             '''
 
         
