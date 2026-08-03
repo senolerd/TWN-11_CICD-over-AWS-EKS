@@ -20,7 +20,7 @@ pipeline {
 
         AWS_JENKINS_ACC_KEY_ID = "aws-jenkins-access-key"
         EKS_CLUSTER_NAME = "mykube"
-        EKS_NAMESPACE = "java-maven"
+        APP_NAMESPACE = "java-maven"
         AWS_REGION = "us-east-1"
     }
     tools { 
