@@ -62,21 +62,21 @@ pipeline {
             }
         }
 
-        // stage("Version bump") {
-        //     steps {
-        //         script{
-        //             utils.versionUpdate()
-        //         }
-        //     }
-        // }
+        stage("Version bump") {
+            steps {
+                script{
+                    utils.versionUpdate()
+                }
+            }
+        }
 
-        // stage("Git update for version bump") {
-        //     steps {
-        //         script {
-        //             utils.gitPushNewVersion()
-        //         }
-        //     }
-        // }
+        stage("Git update for version bump") {
+            steps {
+                script {
+                    utils.gitPushNewVersion()
+                }
+            }
+        }
 
     }
 }

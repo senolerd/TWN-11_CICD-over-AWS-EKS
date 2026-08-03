@@ -90,7 +90,7 @@ void deployToEKS() {
 
     withCredentials([usernamePassword(credentialsId: env.AWS_JENKINS_ACC_KEY_ID, passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
         sh "aws eks update-kubeconfig --name ${EKS_CLUSTER_NAME} --region ${AWS_REGION} --kubeconfig ${EKS_CLUSTER_NAME}.config"
-        sh "helm upgrade --install java-maven helm-chart -n ${APP_NAMESPACE} --create-namespace --set image=$IMAGE_NAME"
+        sh "helm upgrade --install java-maven helm-chart --kubeconfig ${EKS_CLUSTER_NAME}.config -n ${APP_NAMESPACE} --create-namespace --set image=$IMAGE_NAME"
     }
 
 }
