@@ -48,10 +48,11 @@ void buildImageToDocker() {
 void buildImageToECR() {
     // public.ecr.aws/aws-cli/aws-cli:2.36.6
 
-    withCredentials([usernamePassword(credentialsId: env.AWS_JENKINS_ACC_KEY_ID, passwordVariable: 'AWS_ACCESS_KEY_ID', usernameVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+    withCredentials([usernamePassword(credentialsId: env.AWS_JENKINS_ACC_KEY_ID, passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
         
-        String ecrToken = sh(script:'podman run --rm --name aws -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY  public.ecr.aws/aws-cli/aws-cli:2.36.6 ecr get-login-password --region $AWS_REGION', returnStdout: true)
-        echo "ecrToken $ecrToken"
+        String ecrToken = sh(script:'podman run --rm --name aws -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY  public.ecr.aws/aws-cli/aws-cli:2.36.6 ecr get-login-password ', returnStdout: true)
+        echo "TOKEN: $ecrToken"
+        
 
     // echo "Logging in to ${env.REGISTRY}"
     // sh 'podman login -u $USR -p $PW $REGISTRY'
