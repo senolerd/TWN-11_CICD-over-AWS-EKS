@@ -53,9 +53,12 @@ void buildImageToECR() {
         env.ECR_TOKEN = sh(script:'podman run --rm --name aws -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY  public.ecr.aws/aws-cli/aws-cli:2.36.6 ecr get-login-password', returnStdout: true).trim()
         env.AWS_ACCOUNT = sh(script:'podman run --rm --name aws -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY  public.ecr.aws/aws-cli/aws-cli:2.36.6 sts get-caller-identity --query "Account" --output text', returnStdout: true).trim()
         
-    echo "Logging in to ECR"
-    
-    sh 'podman login -u AWS -p $ECR_TOKEN ${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com > /dev/null 2>&1'
+        echo "Logging in to ECR"
+        sh '''
+            set +x
+            podman login -u AWS -p $ECR_TOKEN ${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com > /dev/null 2>&1
+            set -x
+            '''
 
         
 
