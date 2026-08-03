@@ -55,7 +55,7 @@ void buildImageToECR() {
         
     echo "Logging in to ECR"
     
-    sh 'podman login -u AWS -p $ECR_TOKEN ${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com'
+    sh 'podman login -u AWS -p $ECR_TOKEN ${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com > /dev/null 2>&1'
 
         
 
@@ -102,3 +102,5 @@ void gitPushNewVersion() {
 }
 
 return this
+
+
