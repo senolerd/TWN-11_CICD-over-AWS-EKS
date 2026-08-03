@@ -89,13 +89,11 @@ void deployToEKS() {
     sh "sed -i '/appVersion/c\\appVersion: $APP_VER-$BUILD_NUMBER' helm-chart/Chart.yaml"
 
     withCredentials([usernamePassword(credentialsId: env.AWS_JENKINS_ACC_KEY_ID, passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
-        echo "Getting kubeconfig file"
-        sh 'aws eks update-kubeconfig --name ${EKS_CLUSTER_NAME} --region ${AWS_REGION} --kubeconfig ${EKS_CLUSTER_NAME}.config'
+        sh "aws eks update-kubeconfig --name ${EKS_CLUSTER_NAME} --region ${AWS_REGION} --kubeconfig ${EKS_CLUSTER_NAME}.config"
     }
 
     withCredentials([usernamePassword(credentialsId: env.AWS_JENKINS_ACC_KEY_ID, passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
-        echo "Getting kubeconfig file"
-        sh 'helm list --kubeconfig ${EKS_CLUSTER_NAME}.config'
+        sh "helm list --kubeconfig ${EKS_CLUSTER_NAME}.config"
     }
 
 
