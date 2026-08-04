@@ -55,12 +55,12 @@ void buildImageToECR() {
 
         echo "Logging in to ECR"
         sh '''
-            set +x
+            set +x 
             podman login -u AWS -p $ECR_TOKEN ${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com 
             set -x
-            echo "Checking login"
+            echo "Checking ECR login status"
             podman login ${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com 
-            '''
+        '''
         
         env.IMAGE_NAME = "${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REPO_NAME}:${APP_VER}-${BUILD_NUMBER}"
         

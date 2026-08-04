@@ -1,8 +1,13 @@
-## 
+## Java Maven application CI-CD with Jenkins and AWS EKS-ECR 
 
-Required applications expected to installed on Jenkins servers will be used at pipeline;
-- awscli2
-- helm
+
+
+
+
+
+Required applications expected to installed on Jenkins servers/containers that will be used at pipeline workflow;
+- awscli2: For pulling EKS clusters config file
+- helm: Installing/Updating the application and its further updates.
 
 
 Plan:
@@ -14,3 +19,28 @@ Plan:
     c. CI step: Build and push Docker image to Docker Hub
     d. CD step: Deploy new application to EKS cluster
     e. Commit the version update
+
+
+
+
+
+
+
+
+Quick Policy for the user going to be used for deployment pipeline:
+```
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Sid": "DescribeCluster_for_getting_cluster_config_and_full_ecr",
+			"Effect": "Allow",
+			"Action": [
+				"ecr:*",
+				"eks:DescribeCluster"
+			],
+			"Resource": "*"
+		}
+	]
+}
+```
