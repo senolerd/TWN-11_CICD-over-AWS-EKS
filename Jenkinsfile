@@ -19,8 +19,8 @@ pipeline {
         //      other than who created the cluster.
 
         AWS_JENKINS_ACC_KEY_ID = "aws-jenkins-access-key"
-        EKS_CLUSTER_NAME = "mykube" // cluster should be created before the pipeline run
-        REPO_NAME = 'java-maven-app' // ECR repo should be created before the pipeline run
+        EKS_CLUSTER_NAME = "" // cluster should be created and defined here before the pipeline is run
+        REPO_NAME = 'java-maven-app'
         APP_NAMESPACE = "java-maven"
         AWS_REGION = "us-east-1"
     }
